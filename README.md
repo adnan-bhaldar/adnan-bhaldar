@@ -1,4 +1,4 @@
-![Banner](https://github.com/Tejaswi-Chaudhari/Tejaswi-Chaudhari/blob/7b2e48c467e9a314b5e5e8bb87e170af27bed601/Banner.gif)
+![Banner](https://github.com/adnan-bhaldar/adnan-bhaldar/blob/main/Banner.gif)
 <h1 align="center">Hellooo there <img src="https://raw.githubusercontent.com/ABSphreak/ABSphreak/master/gifs/Hi.gif" width="3%"> Adnan here</h1>
 <p align="center"><img src="https://visitor-badge.laobi.icu/badge?page_id=Adnan-Bhaldar.Adnan-Bhaldar"> <img src="https://img.shields.io/github/followers/Adnan-Bhaldar?label=Follow&style=social)](https://github.com/Tejaswi-Chaudhari"></p>
 

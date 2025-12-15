@@ -22,3 +22,7 @@ Here are some ideas to get you started:
   <img width="49.75%" src="https://github-readme-streak-stats.herokuapp.com/?user=Adnan-Bhaldar&background=ffffff&stroke=5271ff&ring=5271ff&fire=5271ff&currStreakNum=5271ff&sideNums=5271ff&currStreakLabel=000000&sideLabels=000000&dates=000000)](https://git.io/streak-stats" alt="GitHub Streak"/>
 </p> -->
 
+---
+
+![Most Used Languages](https://github-readme-stats.vercel.app/api?username=adnan-bhaldar&show_icons=true&theme=dark&count_private=true)
+![Github Stats](https://github-readme-stats.vercel.app/api/top-langs/?username=adnan-bhaldar&theme=dark&layout=compact)

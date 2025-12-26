@@ -2,7 +2,7 @@ name: Update Year in Goals
 
 on:
   schedule:
-    # Runs on January 1st at 00:05 AM IST (December 31st 6:35 PM UTC)
+    # Runs on January 1st at 12:05 AM IST (December 31st 6:35 PM UTC)
     - cron: '35 18 31 12 *'
   
   # Allows manual trigger
@@ -32,29 +32,36 @@ jobs:
           # Set timezone to IST
           export TZ='Asia/Kolkata'
           
-          # Get current year and next year
-          CURRENT_YEAR=$(date '+%Y')
-          NEXT_YEAR=$((CURRENT_YEAR + 1))
+          # Get current year from system
+          CURRENT_SYSTEM_YEAR=$(date '+%Y')
           
-          echo "📅 Current Year: $CURRENT_YEAR"
-          echo "📅 Next Year: $NEXT_YEAR"
+          echo "📅 System Year: $CURRENT_SYSTEM_YEAR"
           
-          # Show current goals section
-          echo "🔍 Current Goals section:"
-          grep -A 5 "## 🎯" README.md || echo "Goals section not found"
+          # Find what year is currently in README (extracts the year from "## 🎯 YYYY Goals")
+          CURRENT_README_YEAR=$(grep -oP '## 🎯 \K[0-9]{4}(?= Goals)' README.md 2>/dev/null || echo "")
           
-          # Update all year references in the goals section
-          # This will update: "2025 Goals" → "2026 Goals"
-          sed -i "s/## 🎯 ${CURRENT_YEAR} Goals/## 🎯 ${NEXT_YEAR} Goals/g" README.md
+          if [ -z "$CURRENT_README_YEAR" ]; then
+            echo "❌ Could not find year in Goals section"
+            exit 0
+          fi
           
-          # Also update if format is different
-          sed -i "s/${CURRENT_YEAR} Goals/${NEXT_YEAR} Goals/g" README.md
+          echo "📖 README currently shows: $CURRENT_README_YEAR Goals"
           
-          # Show updated section
-          echo "✏️ Updated Goals section:"
-          grep -A 5 "## 🎯" README.md
+          # Update logic: If README year is different from system year, update it
+          if [ "$CURRENT_README_YEAR" != "$CURRENT_SYSTEM_YEAR" ]; then
+            echo "🔄 Updating from $CURRENT_README_YEAR to $CURRENT_SYSTEM_YEAR"
+            
+            # Replace the year in the README
+            sed -i "s/## 🎯 ${CURRENT_README_YEAR} Goals/## 🎯 ${CURRENT_SYSTEM_YEAR} Goals/g" README.md
+            
+            echo "✅ Updated from $CURRENT_README_YEAR to $CURRENT_SYSTEM_YEAR!"
+          else
+            echo "✅ README year already matches system year ($CURRENT_SYSTEM_YEAR). No update needed."
+          fi
           
-          echo "✅ Year updated from $CURRENT_YEAR to $NEXT_YEAR!"
+          # Show the goals section
+          echo "📋 Current Goals section:"
+          grep -A 6 "## 🎯" README.md
       
       - name: Commit and Push Changes
         run: |

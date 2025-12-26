@@ -28,6 +28,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Sync System Time
+        run: |
+          sudo timedatectl set-ntp true
+          sleep 2
+          echo "System time synced"
+      
       - name: Update README with IST Timestamp
         run: |
           # Set timezone to India Standard Time
@@ -38,25 +44,34 @@ jobs:
           
           echo "📅 Current IST Time: $CURRENT_DATE"
           
-          # Update the timestamp in README.md
+          # Show current line
+          echo "🔍 Current timestamp line:"
+          grep -E "(Last Updated:|*Last Updated:)" README.md || echo "Not found"
+          
+          # Update both patterns (with and without asterisks)
+          sed -i "s/Last Updated:.*/Last Updated: $CURRENT_DATE/g" README.md
           sed -i "s/\*Last Updated:.*\*/\*Last Updated: $CURRENT_DATE\*/g" README.md
+          
+          # Show updated line
+          echo "✏️ Updated timestamp line:"
+          grep -E "(Last Updated:|*Last Updated:)" README.md
           
           echo "✅ README.md updated successfully!"
       
       - name: Commit and Push Changes
         run: |
-          # Configure git user
+          export TZ='Asia/Kolkata'
+          
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Add the modified README
           git add README.md
           
-          # Check if there are changes to commit
           if ! git diff --cached --quiet; then
-            git commit -m "🤖 Update README timestamp [IST: $(date '+%I:%M %p')]"
+            COMMIT_TIME=$(date '+%B %d, %Y at %I:%M %p IST')
+            git commit -m "🤖 Update README timestamp [$COMMIT_TIME]"
             git push origin main
             echo "✅ Changes pushed successfully!"
           else
-            echo "ℹ️  No changes to commit"
+            echo "ℹ️ No changes to commit"
           fi

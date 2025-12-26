@@ -205,7 +205,7 @@ const adnan = {
 
 ---
 
-## 🎯 2026 Goals
+## 🎯 2024 Goals
 
 ```diff
 + 🚀 Build and launch 5 major web applications
@@ -235,6 +235,6 @@ const adnan = {
 
 **Made with ❤️ by Adnan Bhaldar**
 
-Last Updated: December 26, 2025 at 08:34 PM IST
+*Last Updated: December 26, 2025 at 08:34 PM IST*
 
 </div>

@@ -148,6 +148,16 @@ const adnan = {
 
 ---
 
+## 🐍 Snake Eating My Contributions
+
+<div align="center">
+
+![Snake animation](https://raw.githubusercontent.com/adnan-bhaldar/adnan-bhaldar/output/github-contribution-grid-snake-dark.svg)
+
+</div>
+
+---
+
 ## 💭 Random Dev Quote
 
 <div align="center">

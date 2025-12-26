@@ -205,7 +205,7 @@ const adnan = {
 
 ---
 
-## 🎯 2025 Goals
+## 🎯 2026 Goals
 
 ```diff
 + 🚀 Build and launch 5 major web applications

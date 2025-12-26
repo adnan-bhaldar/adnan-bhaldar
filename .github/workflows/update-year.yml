@@ -1,0 +1,75 @@
+name: Update Year in Goals
+
+on:
+  schedule:
+    # Runs on January 1st at 00:05 AM IST (December 31st 6:35 PM UTC)
+    - cron: '35 18 31 12 *'
+  
+  # Allows manual trigger
+  workflow_dispatch:
+  
+  # Runs on push to main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  update-year:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Update Year in README
+        run: |
+          # Set timezone to IST
+          export TZ='Asia/Kolkata'
+          
+          # Get current year and next year
+          CURRENT_YEAR=$(date '+%Y')
+          NEXT_YEAR=$((CURRENT_YEAR + 1))
+          
+          echo "📅 Current Year: $CURRENT_YEAR"
+          echo "📅 Next Year: $NEXT_YEAR"
+          
+          # Show current goals section
+          echo "🔍 Current Goals section:"
+          grep -A 5 "## 🎯" README.md || echo "Goals section not found"
+          
+          # Update all year references in the goals section
+          # This will update: "2025 Goals" → "2026 Goals"
+          sed -i "s/## 🎯 ${CURRENT_YEAR} Goals/## 🎯 ${NEXT_YEAR} Goals/g" README.md
+          
+          # Also update if format is different
+          sed -i "s/${CURRENT_YEAR} Goals/${NEXT_YEAR} Goals/g" README.md
+          
+          # Show updated section
+          echo "✏️ Updated Goals section:"
+          grep -A 5 "## 🎯" README.md
+          
+          echo "✅ Year updated from $CURRENT_YEAR to $NEXT_YEAR!"
+      
+      - name: Commit and Push Changes
+        run: |
+          export TZ='Asia/Kolkata'
+          
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add README.md
+          
+          if ! git diff --cached --quiet; then
+            CURRENT_YEAR=$(date '+%Y')
+            git commit -m "🎯 Update goals year to $CURRENT_YEAR [Auto-update]"
+            git push origin main
+            echo "✅ Changes pushed successfully!"
+          else
+            echo "ℹ️ No changes to commit"
+          fi

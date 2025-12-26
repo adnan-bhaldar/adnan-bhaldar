@@ -39,8 +39,8 @@ jobs:
           # Set timezone to India Standard Time
           export TZ='Asia/Kolkata'
           
-          # Get current date and time in IST format
-          CURRENT_DATE=$(date '+%B %d, %Y at %I:%M %p IST')
+          # Get current date and time in IST format (24-hour)
+          CURRENT_DATE=$(date '+%B %d, %Y at %H:%M IST')
           
           echo "📅 Current IST Time: $CURRENT_DATE"
           
@@ -68,7 +68,7 @@ jobs:
           git add README.md
           
           if ! git diff --cached --quiet; then
-            COMMIT_TIME=$(date '+%B %d, %Y at %I:%M %p IST')
+            COMMIT_TIME=$(date '+%B %d, %Y at %H:%M IST')
             git commit -m "🤖 Update README timestamp [$COMMIT_TIME]"
             git push origin main
             echo "✅ Changes pushed successfully!"

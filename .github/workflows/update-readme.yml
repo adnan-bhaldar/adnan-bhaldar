@@ -69,7 +69,7 @@ jobs:
           
           if ! git diff --cached --quiet; then
             COMMIT_TIME=$(date '+%B %d, %Y at %H:%M IST')
-            git commit -m "🤖 Update README timestamp [$COMMIT_TIME]"
+            git commit -m "🤖 Update timestamp [$COMMIT_TIME]"
             git push origin main
             echo "✅ Changes pushed successfully!"
           else

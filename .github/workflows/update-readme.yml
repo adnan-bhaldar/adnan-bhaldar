@@ -1,17 +1,23 @@
-name: Update README Timestamp
+name: Auto Update README
 
 on:
   schedule:
-    # Runs daily at 6:00 AM IST (12:30 AM UTC)
+    # Update timestamp daily at 6:00 AM IST (12:30 AM UTC)
     - cron: '30 0 * * *'
+    
+    # Update year on January 1st at midnight IST (6:30 PM UTC Dec 31)
+    - cron: '30 18 31 12 *'
   
   # Allows manual trigger from Actions tab
   workflow_dispatch:
   
-  # Runs on every push to main branch
+  # Runs on push to main (except README changes to prevent loops)
   push:
     branches:
       - main
+    paths-ignore:
+      - 'README.md'
+      - '.github/workflows/update-readme.yml'
 
 # Set permissions for the GITHUB_TOKEN
 permissions:
@@ -28,33 +34,36 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Sync System Time
-        run: |
-          sudo timedatectl set-ntp true
-          sleep 2
-          echo "System time synced"
-      
-      - name: Update README with IST Timestamp
+      - name: Update README
         run: |
           # Set timezone to India Standard Time
           export TZ='Asia/Kolkata'
           
-          # Get current date and time in IST format (24-hour)
+          # Get current date, time, and year
           CURRENT_DATE=$(date '+%B %d, %Y at %H:%M IST')
+          CURRENT_YEAR=$(date '+%Y')
+          NEXT_YEAR=$((CURRENT_YEAR + 1))
           
           echo "📅 Current IST Time: $CURRENT_DATE"
+          echo "📆 Current Year: $CURRENT_YEAR"
+          echo "📆 Next Year: $NEXT_YEAR"
           
-          # Show current line
-          echo "🔍 Current timestamp line:"
-          grep -E "(Last Updated:|*Last Updated:)" README.md || echo "Not found"
+          # Check if it's January 1st (New Year)
+          CURRENT_MONTH_DAY=$(date '+%m-%d')
           
-          # Update both patterns (with and without asterisks)
-          sed -i "s/Last Updated:.*/Last Updated: $CURRENT_DATE/g" README.md
-          sed -i "s/\*Last Updated:.*\*/\*Last Updated: $CURRENT_DATE\*/g" README.md
+          # Update timestamp
+          echo "🔄 Updating timestamp..."
+          sed -i -E "s/(Last Updated:).*IST/\1 $CURRENT_DATE/g" README.md
+          sed -i -E "s/(\*\*Last Updated:).*IST(\*\*)/\1 $CURRENT_DATE\2/g" README.md
           
-          # Show updated line
-          echo "✏️ Updated timestamp line:"
-          grep -E "(Last Updated:|*Last Updated:)" README.md
+          # Update year in goals section if it's New Year
+          if [ "$CURRENT_MONTH_DAY" == "01-01" ]; then
+            echo "🎉 Happy New Year! Updating year in goals section..."
+            sed -i -E "s/## 🎯 [0-9]{4} Goals/## 🎯 $CURRENT_YEAR Goals/g" README.md
+            echo "✅ Year updated to $CURRENT_YEAR"
+          else
+            echo "ℹ️ Not New Year's Day, keeping current year"
+          fi
           
           echo "✅ README.md updated successfully!"
       
@@ -69,7 +78,15 @@ jobs:
           
           if ! git diff --cached --quiet; then
             COMMIT_TIME=$(date '+%B %d, %Y at %H:%M IST')
-            git commit -m "🤖 Update timestamp [$COMMIT_TIME]"
+            CURRENT_MONTH_DAY=$(date '+%m-%d')
+            
+            if [ "$CURRENT_MONTH_DAY" == "01-01" ]; then
+              CURRENT_YEAR=$(date '+%Y')
+              git commit -m "🎉 Happy New Year $CURRENT_YEAR! Auto-update timestamp and year [$COMMIT_TIME]"
+            else
+              git commit -m "🤖 Auto-update timestamp [$COMMIT_TIME]"
+            fi
+            
             git push origin main
             echo "✅ Changes pushed successfully!"
           else

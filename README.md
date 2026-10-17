@@ -123,7 +123,7 @@ const adnan = {
 </div>
 
 <div align="center">
-  <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=adnan-bhaldar&theme=tokyonight" width="98%" />
+  <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=adnan-bhaldar&theme=tokyonight&name=Adnan+Bhaldar" width="98%" />
 </div>
 
 ---

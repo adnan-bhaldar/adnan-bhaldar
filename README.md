@@ -132,7 +132,7 @@ const adnan = {
 
 <div align="center">
 
-![Trophies](https://github-profile-trophy.vercel.app/?username=adnan-bhaldar&theme=tokyonight&no-frame=true&column=7&margin-w=10&margin-h=10)
+![Trophies](https://github-trophy-jagratadeb.vercel.app//?username=adnan-bhaldar&theme=tokyonight&no-frame=true&column=7&margin-w=10&margin-h=10)
 
 </div>
 
